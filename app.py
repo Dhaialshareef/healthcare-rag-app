@@ -113,7 +113,7 @@ chunks, embedding_model, index = build_knowledge_base()
 # =========================
 # Retrieval
 # =========================
-def retrieve_chunks(question, top_k=3):
+def retrieve_chunks(question, top_k=5):
     question_embedding = embedding_model.encode(
         [question],
         convert_to_numpy=True
@@ -216,7 +216,7 @@ if question:
 
     with st.chat_message("assistant"):
         with st.spinner("Retrieving documents and generating answer using DeepSeek..."):
-            retrieved_chunks = retrieve_chunks(question, top_k=3)
+            retrieved_chunks = retrieve_chunks(question, top_k=5)
             answer = generate_answer(question, retrieved_chunks)
 
             st.write(answer)
