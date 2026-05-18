@@ -45,7 +45,7 @@ def build_knowledge_base():
         st.error("No PDF files found. Please upload PDF files in the same folder as app.py.")
         st.stop()
 
-    progress = st.progress(0, text="📄 Reading PDF files...")
+    progress = st.progress(0, text=" Reading PDF files...")
     documents = []
 
     for pdf_file in pdf_files:
@@ -85,10 +85,10 @@ def build_knowledge_base():
         st.error("PDF files were found, but no readable text was extracted.")
         st.stop()
 
-    progress.progress(60, text="🧠 Loading embedding model...")
+    progress.progress(60, text=" Loading embedding model...")
     embedding_model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 
-    progress.progress(80, text="🔍 Building search index...")
+    progress.progress(80, text=" Building search index...")
     texts = [chunk["text"] for chunk in chunks]
     embeddings = embedding_model.encode(
         texts,
@@ -113,7 +113,7 @@ chunks, embedding_model, index = build_knowledge_base()
 # =========================
 # Retrieval
 # =========================
-def retrieve_chunks(question, top_k=5):
+def retrieve_chunks(question, top_k=3):
     question_embedding = embedding_model.encode(
         [question],
         convert_to_numpy=True
@@ -132,7 +132,7 @@ def retrieve_chunks(question, top_k=5):
 # =========================
 def generate_answer(question, retrieved_chunks):
     context = "\n\n---\n\n".join([
-        f"Source: {chunk['source']}, Page: {chunk['page']}\n{chunk['text'][:1200]}"
+        f"Source: {chunk['source']}, Page: {chunk['page']}\n{chunk['text'][:700]}"
         for chunk in retrieved_chunks
     ])
 
@@ -166,7 +166,7 @@ Answer:
             {"role": "user", "content": prompt}
         ],
         max_tokens=500,
-        temperature=0.3
+        temperature=0.0
     )
 
     return response.choices[0].message.content
@@ -216,7 +216,7 @@ if question:
 
     with st.chat_message("assistant"):
         with st.spinner("Retrieving documents and generating answer using DeepSeek..."):
-            retrieved_chunks = retrieve_chunks(question, top_k=5)
+            retrieved_chunks = retrieve_chunks(question, top_k=3)
             answer = generate_answer(question, retrieved_chunks)
 
             st.write(answer)
