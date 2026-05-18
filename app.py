@@ -132,7 +132,7 @@ def retrieve_chunks(question, top_k=3):
 # =========================
 def generate_answer(question, retrieved_chunks):
     context = "\n\n---\n\n".join([
-        f"Source: {chunk['source']}, Page: {chunk['page']}\n{chunk['text'][:700]}"
+        f"Source: {chunk['source']}, Page: {chunk['page']}\n{chunk['text'][:1200]}"
         for chunk in retrieved_chunks
     ])
 
