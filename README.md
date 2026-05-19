@@ -12,7 +12,6 @@ Healthcare RAG Assistant is a Retrieval-Augmented Generation (RAG) web applicati
 - Eczema
 - Psoriasis
 - Skin Cancer
-- UV Radiation
 
 ## Technologies Used
 
